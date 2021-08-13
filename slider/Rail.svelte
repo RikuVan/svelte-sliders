@@ -22,6 +22,7 @@
 
 <style lang="scss">
     @use '_variables';
+    $rail-size: 4px;
 
     .rail {
         position: absolute;
@@ -31,18 +32,19 @@
 
     .rail-horizontal {
         width: 100%;
-        height: 4px;
+        height: $rail-size;
         top: 0;
     }
 
     .rail-vertical {
         height: 100%;
-        width: 4px;
+        width: $rail-size;
         left: 0;
         top: 0;
     }
 
     .rail-disabled {
         background: lightgrey;
+        cursor: not-allowed;
     }
 </style>

@@ -14,6 +14,7 @@ export type SliderOrientation = 'horizontal' | 'vertical';
 export type SliderStoreState = {
     initialValue: number;
     value: number;
+    activeHandle: number;
     min: number;
     max: number;
     disabled: boolean;
@@ -21,3 +22,4 @@ export type SliderStoreState = {
     step: number;
     ticks: TickConfig;
 };
+export type RangeBehavior = 'free' | 'block' | 'push';

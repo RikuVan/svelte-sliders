@@ -21,7 +21,8 @@ export function createContextStore(id, initial = {}) {
     const dispatch = createEventDispatcher();
     const dispatcher = events.reduce((acc, event) => {
         acc[event] = (state = get(store)) => {
-            dispatch(event, state);
+            const s = { ...state, value: unnestSingle(state.value) };
+            dispatch(event, s);
         };
         return acc;
     }, {});
@@ -39,7 +40,7 @@ export function validateProps({ min, max, step, orientation }) {
     if (step !== undefined && typeof step !== 'number') {
         warnOnce('step must be of type number: ', typeof step);
     }
-    if ((orientation !== undefined && orientation !== 'horizontal') || orientation !== 'vertical') {
+    if (orientation !== undefined && orientation !== 'horizontal' && orientation !== 'vertical') {
         warnOnce('orientation must be either "horizontal" or "vertical"');
     }
 }
@@ -198,12 +199,24 @@ export function getClosestPoint(val, { ticks, step, min, max }) {
 
 /**
  * convert from slider value to percentage of min between max
- * @param {number} value
+ * used for ticks too which are not an array value
+ * @param {SliderStoreState} store
+ * @param {number} index
  * @returns {number}
  */
-export function calcPercentOfRange({ value, min, max }) {
-    const ratio = (value - min) / (max - min);
+export function calcPercentOfRange({ value, min, max }, index = 0) {
+    const current = Array.isArray(value) ? value[index] : value;
+    const ratio = (current - min) / (max - min);
     return Math.max(0, ratio * 100);
+}
+
+/**
+ * if a single handle give user value unnested
+ * @param {number | number[]} value
+ * @returns {number | number[]}
+ */
+export function unnestSingle(value) {
+    return value.length === 1 ? value[0] : value;
 }
 
 /**
@@ -232,6 +245,27 @@ export function warnOnce(msg) {
         // eslint-disable-next-line no-console
         console.warn(`slider: ${msg}`);
     }
+}
+
+/**
+ * @param {number} value
+ * @param {[number] | [number, number]} handleValues
+ * @returns {number}
+ */
+export function getClosestHandle(value, handleValues) {
+    let closestHandleIndex = 0;
+    for (let i = 1; i < handleValues.length - 1; i += 1) {
+        if (value >= handleValues[i]) {
+            closestHandleIndex = i;
+        }
+    }
+    if (
+        Math.abs(handleValues[closestHandleIndex + 1] - value) <
+        Math.abs(handleValues[closestHandleIndex] - value)
+    ) {
+        closestHandleIndex += 1;
+    }
+    return closestHandleIndex;
 }
 
 /**

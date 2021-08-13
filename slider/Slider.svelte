@@ -14,6 +14,8 @@
         createContextStore,
         validateProps,
         equal,
+        unnestSingle,
+        getClosestHandle,
     } from './utils';
 
     /**
@@ -37,9 +39,9 @@
      */
     export let disabled = false;
     /**
-     * @type {number}
+     * @type {number | [number, number]}
      */
-    export let value = 0;
+    export let value = 50;
     /**
      * @type {number}
      */
@@ -58,19 +60,38 @@
      * @type {boolean}
      */
     export let dedupe = true;
+    /**
+     * @type {import('./types').RangeBehavior}
+     */
+    export let rangeBehavior = 'block';
+
+    $: value = typeof value === 'number' ? [value] : value.slice(0, 2);
+    $: isRange = value.length > 1;
+
+    /**
+     * @type {HTMLDivElement}
+     */
+    let slider;
+    /**
+     * @type {boolean}
+     */
+    let sliderActive = false;
+    /**
+     * @type {number}
+     */
+    let activeHandle = value[0] === max ? 0 : value.length - 1;
 
     let [key, store, dispatcher] = createContextStore(id, {
         initialValue: value,
         value,
         min,
         max,
+        activeHandle,
         disabled,
         orientation,
         step,
         ticks,
     });
-    let slider;
-    let sliderActive;
 
     $: vertical = orientation === 'vertical';
 
@@ -93,7 +114,8 @@
             // if user clicks handle and lets go without changing position
             // this will be deduped, but start and stop will fire
             if (dedupe && equal(lastState, state)) return;
-            dispatcher.change(state);
+            const s = { ...state, value: unnestSingle(state.value) };
+            dispatcher.change(s);
             lastState = { ...state };
         });
         return () => {
@@ -101,9 +123,15 @@
         };
     });
 
-    function onStart() {
+    /**
+     * @param {Event} e
+     */
+    function onStart(e) {
         if (!sliderActive) {
             sliderActive = true;
+            const pos = getPosition(vertical, e);
+            const nextValue = calcValByPos(pos - dragOffset);
+            $store.activeHandle = getClosestHandle(nextValue, $store.value);
             dispatcher.start();
         }
     }
@@ -173,8 +201,38 @@
         const pos = getPosition(vertical, e);
         const nextValue = calcValByPos(pos - dragOffset);
         stopEvent(e);
-        if (nextValue == value) return;
-        $store.value = nextValue;
+        moveHandle($store.activeHandle, nextValue);
+    }
+
+    /**
+     * @param {number} index
+     * @param {number} nextValue
+     */
+    function moveHandle(index, nextValue) {
+        if (nextValue == $store.value[index]) return;
+        let next = [...$store.value];
+        next[index] = nextValue;
+        let skip = false;
+        if (isRange && rangeBehavior !== 'free') {
+            next.forEach((handle, handleIndex) => {
+                if (handleIndex === index) return;
+                const direction = handle < $store.value[index] ? '<-' : '->';
+                const willCrossOver =
+                    direction === '<-'
+                        ? handle => handle >= nextValue
+                        : handle => handle <= nextValue;
+                if (rangeBehavior === 'push' && willCrossOver(handle)) {
+                    if (direction === '<-') {
+                        next[handleIndex] = next[index] - 1;
+                    } else {
+                        next[handleIndex] = next[index] + 1;
+                    }
+                } else if (rangeBehavior === 'block' && willCrossOver(handle)) {
+                    skip = true;
+                }
+            });
+        }
+        if (!skip) $store.value = next;
     }
 
     /**
@@ -196,27 +254,31 @@
      */
     function onKeyDown(e) {
         if (disabled) return;
+        let value = undefined;
         switch (e.keyCode) {
             case keyCode.UP:
             case keyCode.RIGHT:
-                $store.value += step;
+                value = $store.value[$store.activeHandle] += step;
                 break;
             case keyCode.DOWN:
             case keyCode.LEFT:
-                $store.value -= step;
+                value = $store.value[$store.activeHandle] -= step;
                 break;
             case keyCode.END:
-                $store.value = max;
+                value = max;
                 break;
             case keyCode.HOME:
-                $store.value = min;
+                value = min;
                 break;
             case keyCode.PAGE_UP:
-                $store.value += step * 2;
+                value = $store.value[$store.activeHandle] += step * 2;
                 break;
             case keyCode.PAGE_DOWN:
-                $store.value -= step * 2;
+                value = $store.value[$store.activeHandle] -= step * 2;
                 break;
+        }
+        if (value !== undefined) {
+            moveHandle($store.activeHandle, value);
         }
         stopEvent(e);
     }
@@ -231,7 +293,9 @@
     on:keydown={onKeyDown}
 >
     <Rail {key} />
-    <Handle {key} />
+    {#each value as _, index}
+        <Handle {key} {index} />
+    {/each}
     <RangeSelection {key} />
     <Ticks {key} />
 </div>

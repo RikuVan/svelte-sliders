@@ -14,13 +14,17 @@
      */
     export let key;
     /**
+     * @type {number}
+     */
+    export let index = 0;
+    /**
      * @type {Writable<SliderStoreState>}
      */
     const sliderState = getContext(key);
     /**
      * @type {number}
      */
-    export let tabIndex = 0;
+    export let tabIndex = index;
     /**
      * @type {boolean}
      */
@@ -52,6 +56,7 @@
     function handleFocus(e) {
         if (!disabled) {
             focus = true;
+            $sliderState.activeHandle = index;
         }
     }
 
@@ -67,13 +72,17 @@
     /**
      * @type {number}
      */
-    let initialPosition = calcPercentOfRange({
-        ...$sliderState,
-        value: $sliderState.initialValue || 0,
-    });
+    let initialPosition = calcPercentOfRange(
+        {
+            ...$sliderState,
+            value: $sliderState.initialValue || 0,
+        },
+        index
+    );
     const tween = tweened(initialPosition, { duration: 120, easing: sineOut });
 
-    $: offset = calcPercentOfRange($sliderState);
+    $: zIndex = `z-index:${$sliderState.activeHandle === index ? 3 : 2};`;
+    $: offset = calcPercentOfRange($sliderState, index);
     $: tween.set(offset);
     $: position =
         $sliderState.orientation === 'vertical' ? `bottom:${$tween}%;` : `left:${$tween}%;`;
@@ -83,42 +92,47 @@
 <div
     role="slider"
     class={`handle handle-${$sliderState.orientation}`}
-    tabindex={disabled ? null : tabIndex}
-    style={position}
+    tabindex={disabled ? -1 : tabIndex}
+    style={position + zIndex}
     bind:this={handle}
     on:keydown={handleKeyDown}
     on:mousedown|preventDefault={handleMouseDown}
     on:focus={handleFocus}
     on:blur={handleBlur}
-    data-handle={1}
+    data-handle={index}
+    class:handle-active={$sliderState.activeHandle === index}
     class:handle-focus={focus}
     class:handle-disabled={disabled}
-    aria-valuenow={$sliderState.value}
+    aria-valuenow={$sliderState.value[index]}
+    aria-orientation={$sliderState.orientation}
     aria-disabled={disabled}
 />
 
 <style lang="scss">
     @use '_variables';
     $handle: #838de7;
+    $handle-radius: 10px;
+    $handle-border-width: 4px;
+    $rail-size: 4px;
 
     .handle {
         position: absolute;
         display: block;
-        height: 12px;
-        width: 12px;
+        height: $handle-radius;
+        width: $handle-radius;
         border-radius: 50%;
         z-index: 2;
-        border: 4px solid variables.$main;
+        border: $handle-border-width solid variables.$main;
         background: #fff;
     }
 
     .handle-horizontal {
-        top: -8px;
+        top: -(($handle-radius + $rail-size) / 2);
         transform: translateX(-50%);
     }
 
     .handle-vertical {
-        left: -8px;
+        left: -(($handle-radius + $rail-size) / 2);
         transform: translateY(+50%);
     }
 
@@ -127,15 +141,13 @@
         box-shadow: 0px 0px 0px 8px rgb(131, 141, 231, 16%);
     }
 
-    .handle:focus,
-    .handle:active {
+    .handle:focus {
         outline: none;
         box-shadow: 0px 0px 0px 8px rgb(131, 141, 231, 16%);
     }
 
-    .handle-focus {
+    .handle-active {
         background: variables.$main;
-        box-shadow: 0px 0px 0px 8px rgb(131, 141, 231, 16%);
     }
 
     .handle-disabled,
@@ -144,5 +156,6 @@
         cursor: not-allowed;
         border-color: variables.$disabled;
         box-shadow: none;
+        background: white;
     }
 </style>
