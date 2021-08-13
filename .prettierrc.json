@@ -1,0 +1,12 @@
+{
+  "singleQuote": true,
+  "arrowParens": "avoid",
+  "svelteSortOrder": "options-scripts-markup-styles",
+  "svelteBracketNewLine": true,
+  "endOfLine": "auto",
+  "printWidth": 100,
+  "proseWrap": "preserve",
+  "semi": true,
+  "tabWidth": 4,
+  "useTabs": false
+}

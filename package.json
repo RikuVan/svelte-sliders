@@ -1,0 +1,22 @@
+{
+    "name": "attractions-slider",
+    "version": "1.0.0",
+    "description": "",
+    "module": "build/slider.mjs",
+    "main": "build/slider.js",
+    "svelte": "slider/index.js",
+    "author": "Richard Van Camp",
+    "license": "ISC",
+    "scripts": {
+        "dev": "NODE_ENV=\\\"development\\\" node esbuild",
+        "build": "NODE_ENV=\\\"production\\\" node esbuild"
+    },
+    "devDependencies": {
+        "attractions": "^3.3.0",
+        "esbuild": "^0.12.16",
+        "esbuild-svelte": "^0.5.3",
+        "sass": "^1.36.0",
+        "svelte": "^3.40.2",
+        "svelte-preprocess": "^4.7.4"
+    }
+}

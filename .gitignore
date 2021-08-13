@@ -1,0 +1,7 @@
+node_modules
+/build/
+/.history
+/node_modules/
+/dist/
+/.vscode/
+.DS_Store
