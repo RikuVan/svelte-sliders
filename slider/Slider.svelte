@@ -14,10 +14,13 @@
         createContextStore,
         validateProps,
         equal,
-        unnestSingle,
         getClosestHandle,
         classes,
     } from './utils';
+
+    /**
+     * @typedef {import('./types').SliderStoreState} State
+     */
 
     /**
      * @type {number}
@@ -108,12 +111,12 @@
     $: $store.disabled = disabled;
     $: $store.step = step;
     $: $store.ticks = ticks;
-    $: $store.value = value;
+    $: $store.value = [...value];
     $: $store.min = min;
     $: store.max = max;
 
     /**
-     * @type {import('./types').SliderStoreState}
+     * @type {State}
      */
     let lastState = {};
 
@@ -123,8 +126,7 @@
             // if user clicks handle and lets go without changing position
             // this will be deduped, but start and stop will fire
             if (dedupe && equal(lastState, state)) return;
-            const s = { ...state, value: unnestSingle(state.value) };
-            dispatcher.change(s);
+            dispatcher.change(state);
             lastState = { ...state };
         });
         return () => {

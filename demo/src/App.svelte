@@ -2,11 +2,13 @@
     import logo from './assets/svelte.png';
     import Counter from './lib/Counter.svelte';
     import Layout from './Layout.svelte';
-    import { Slider } from 'attractions-slider';
+    import { Slider, TimeSlider } from 'attractions-slider';
     import { writable } from 'svelte/store';
+    import { subHours } from 'date-fns';
 
     const store = writable();
     const store2 = writable();
+    const store3 = writable();
 
     let disabled = false;
 
@@ -25,6 +27,7 @@
             {/if}
         </button>
     </div>
+    <h1>2-handle range Slider</h1>
     <div class="slider-container-horizontal">
         <Slider
             id="example"
@@ -37,9 +40,10 @@
             {disabled}
         />
     </div>
-    <div class="slider-1-data slider-data">
+    <div class="span-2 slider-data">
         <pre>{JSON.stringify($store, null, 2)}</pre>
     </div>
+    <h1>1-handle Slider</h1>
     <div class="slider-container-vertical">
         <Slider
             id="example2"
@@ -50,14 +54,32 @@
             on:change={({ detail }) => ($store2 = detail)}
             on:start={({ detail }) => console.log('start', detail)}
             on:stop={({ detail }) => console.log('stop', detail)}
-            on:set={({ detail }) => console.log('set', detail)}
             ticks={{ mode: 'step', step: 100, map: val => `${val} €` }}
             tooltips={{ show: 'active', map: val => `${val} €` }}
             {disabled}
         />
     </div>
-    <div class="slider-2-data slider-data">
+    <div class="slider-data">
         <pre>{JSON.stringify($store2, null, 2)}</pre>
+    </div>
+    <h1>TimeSlider</h1>
+    <div class="slider-container-horizontal-lg">
+        <TimeSlider
+            id="time-example"
+            minDate={subHours(new Date(), 6)}
+            maxDate={new Date()}
+            timeStep="5m"
+            tickTimeStep="1hr"
+            startTimes={[subHours(new Date(), 2), subHours(new Date(), 4)]}
+            dateFormat="ccc HH:mm"
+            on:change={({ detail }) => {
+                $store3 = detail;
+            }}
+            {disabled}
+        />
+    </div>
+    <div class="slider-data span-2">
+        <pre>{JSON.stringify($store3, null, 2)}</pre>
     </div>
 </Layout>
 
@@ -83,6 +105,17 @@
         grid-column: span 2;
     }
 
+    .slider-container-horizontal-lg {
+        min-width: 600px;
+        width: 100%;
+        grid-column: span 2;
+    }
+
+    .span-2,
+    h1 {
+        grid-column: span 2;
+    }
+
     .slider-data {
         margin: 3em auto;
     }
@@ -92,12 +125,8 @@
         margin-right: 0;
     }
 
-    .slider-1-data {
-        grid-column: span 2;
-    }
-
     .slider-container-vertical {
-        padding-top: 3em;
+        padding: 3em 0 5em 0;
         height: 400px;
     }
 </style>

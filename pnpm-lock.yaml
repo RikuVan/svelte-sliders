@@ -5,6 +5,7 @@ importers:
   .:
     specifiers:
       attractions: ^3.3.0
+      date-fns: ^2.23.0
       esbuild: ^0.12.16
       esbuild-svelte: ^0.5.3
       sass: ^1.36.0
@@ -12,6 +13,7 @@ importers:
       svelte-preprocess: ^4.7.4
     devDependencies:
       attractions: 3.3.0_e7f5526753e61f8f489c24d94721b018
+      date-fns: 2.23.0
       esbuild: 0.12.16
       esbuild-svelte: 0.5.3_esbuild@0.12.16
       sass: 1.36.0
@@ -23,6 +25,7 @@ importers:
       '@sveltejs/vite-plugin-svelte': ^1.0.0-next.11
       attractions: ^3.3.0
       attractions-slider: workspace:*
+      date-fns: ^2.23.0
       sass: ^1.36.0
       svelte: ^3.37.0
       svelte-preprocess-sass: ^2.0.1
@@ -30,6 +33,7 @@ importers:
     dependencies:
       attractions: 3.3.0_sass@1.36.0+svelte@3.40.2
       attractions-slider: link:..
+      date-fns: 2.23.0
       sass: 1.36.0
     devDependencies:
       '@sveltejs/vite-plugin-svelte': 1.0.0-next.14_svelte@3.40.2+vite@2.4.3
@@ -143,6 +147,10 @@ packages:
   /colorette/1.2.2:
     resolution: {integrity: sha512-MKGMzyfeuutC/ZJ1cba9NqcNpfeqMUcYmyF1ZFY6/Cn7CNSAKx6a+s48sqLqyAiZuaP2TcqMhoo+dlwFnVxT9w==}
     dev: true
+
+  /date-fns/2.23.0:
+    resolution: {integrity: sha512-5ycpauovVyAk0kXNZz6ZoB9AYMZB4DObse7P3BPWmyEjXNORTI8EJ6X0uaSAq4sCHzM1uajzrkr6HnsLQpxGXA==}
+    engines: {node: '>=0.11'}
 
   /debug/4.3.2:
     resolution: {integrity: sha512-mOp8wKcvj7XxC78zLgw/ZA+6TSgkoE2C/ienthhRD298T7UNwAg9diBpLRxC0mOezLl4B0xV7M0cCO6P/O0Xhw==}

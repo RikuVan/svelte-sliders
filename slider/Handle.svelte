@@ -142,7 +142,6 @@
 <style lang="scss">
     @use '_variables';
     @use "sass:math";
-    $handle: #838de7;
     $handle-radius: 10px;
     $handle-border-width: 4px;
     $rail-size: 4px;

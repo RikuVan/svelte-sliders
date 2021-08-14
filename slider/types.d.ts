@@ -6,7 +6,7 @@ export type TickConfig =
     | { mode: 'steps'; step: number; filter?: TickValueFilterer; map?: TickValueMapper }
     | {
           mode: 'values';
-          values: string[];
+          values: number[];
           filter?: TickValueFilterer;
           map?: TickValueMapper;
       };

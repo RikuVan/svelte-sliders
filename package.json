@@ -17,6 +17,7 @@
         "esbuild-svelte": "^0.5.3",
         "sass": "^1.36.0",
         "svelte": "^3.40.2",
-        "svelte-preprocess": "^4.7.4"
+        "svelte-preprocess": "^4.7.4",
+        "date-fns": "^2.23.0"
     }
 }

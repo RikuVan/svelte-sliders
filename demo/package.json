@@ -10,6 +10,7 @@
   "dependencies": {
     "attractions": "^3.3.0",
     "attractions-slider": "workspace:*",
+    "date-fns": "^2.23.0",
     "sass": "^1.36.0"
   },
   "devDependencies": {

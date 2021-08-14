@@ -159,11 +159,14 @@ export function noop(v) {
  * @param {SliderStoreState} store
  * @returns {number[]}
  */
-function getSteps(step, { min, max }) {
+export function getSteps(step, { min, max }) {
     const steps = (max - min) / step;
     return [
-        min,
-        ...Array.from({ length: steps }, (_, i) => min + (i + 1) * step).filter(s => s <= max),
+        ...new Set([
+            min,
+            ...Array.from({ length: steps }, (_, i) => min + (i + 1) * step).filter(s => s <= max),
+            max,
+        ]),
     ];
 }
 
@@ -175,7 +178,12 @@ function getSteps(step, { min, max }) {
 export function getTickValues({ ticks, min, max }) {
     const { mode, step, filter, values } = ticks;
     const f = filter ? list => list.filter(filter) : noop;
-    return mode === 'step' ? f(getSteps(step, { min, max })) : mode === 'values' ? f(values) : [];
+    return mode === 'step'
+        ? f(getSteps(step, { min, max }))
+        : mode === 'values' && values
+        ? // important to create new array here!
+          f([...values])
+        : [];
 }
 
 /**
