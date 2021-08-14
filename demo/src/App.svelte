@@ -1,6 +1,7 @@
 <script>
     import logo from './assets/svelte.png';
     import Counter from './lib/Counter.svelte';
+    import Layout from './Layout.svelte';
     import { Slider } from 'attractions-slider';
     import { writable } from 'svelte/store';
 
@@ -14,7 +15,7 @@
     }
 </script>
 
-<main>
+<Layout>
     <div class="disable-button">
         <button on:click={onClick}>
             {#if disabled}
@@ -27,11 +28,11 @@
     <div class="slider-container-horizontal">
         <Slider
             id="example"
-            min={10}
-            max={90}
+            min={-30}
+            max={50}
             value={[20, 40]}
             on:change={({ detail }) => ($store = detail)}
-            ticks={{ mode: 'step', step: 10, map: val => `${val}%` }}
+            ticks={{ mode: 'step', step: 10, map: val => `${val}°` }}
             tooltips={{ show: 'active' }}
             {disabled}
         />
@@ -58,24 +59,14 @@
     <div class="slider-2-data slider-data">
         <pre>{JSON.stringify($store2, null, 2)}</pre>
     </div>
-</main>
+</Layout>
 
 <style lang="scss">
-    :root {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
-            Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    }
-
-    main {
-        display: grid;
-        grid-template-columns: 400px 400px;
-        padding: 3em;
-        align-items: center;
-        justify-content: center;
-    }
-
     pre {
         padding: 3em;
+        background: #decef9;
+        color: #4300b0;
+        border: 0;
     }
 
     .disable-button {
@@ -87,14 +78,18 @@
     }
 
     .slider-container-horizontal {
-        width: 800px;
+        min-width: 400px;
+        width: 100%;
         grid-column: span 2;
     }
 
     .slider-data {
-        background: slategray;
-        color: white;
         margin: 3em auto;
+    }
+
+    .slider-2-data {
+        margin-left: auto;
+        margin-right: 0;
     }
 
     .slider-1-data {
@@ -103,6 +98,6 @@
 
     .slider-container-vertical {
         padding-top: 3em;
-        height: 800px;
+        height: 400px;
     }
 </style>

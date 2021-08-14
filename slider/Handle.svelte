@@ -129,7 +129,7 @@
     aria-disabled={disabled}
 >
     {#if withTooltip}
-        <HandleTooltip orientation={$sliderState.orientation}>
+        <HandleTooltip orientation={$sliderState.orientation} disabled={$sliderState.disabled}>
             {#if $sliderState.tooltips.map}
                 {$sliderState.tooltips.map($sliderState.value[index])}
             {:else}

@@ -44,7 +44,7 @@
     }
 
     .rail-disabled {
-        background: lightgrey;
+        background: #cfcfcf;
         cursor: not-allowed;
     }
 </style>

@@ -301,6 +301,7 @@
     on:mousedown={onStart}
     on:keydown={onKeyDown}
     class:slider-active={$store.sliderActive}
+    class:slider-disabled={$store.disabled}
 >
     <Rail {key} />
     {#each value as _, index}
@@ -333,5 +334,9 @@
     .slider-vertical {
         width: 10px;
         height: 100%;
+    }
+
+    .slider-disabled {
+        cursor: not-allowed;
     }
 </style>

@@ -3,9 +3,16 @@
      * @type {import("./types").SliderOrientation}
      */
     export let orientation = 'horizontal';
+    /**
+     * @type {boolean}
+     */
+    export let disabled = false;
 </script>
 
-<div class={`handle-tooltip handle-tooltip-${orientation}`}>
+<div
+    class={`handle-tooltip handle-tooltip-${orientation}`}
+    class:handle-tooltip-disabled={disabled}
+>
     <div class="handle-tooltip-content">
         <slot />
     </div>
@@ -76,5 +83,15 @@
         line-height: 16px;
         font-weight: 600;
         font-variant-numeric: tabular-nums;
+    }
+
+    .handle-tooltip-disabled {
+        .handle-tooltip-content {
+            background: gray;
+        }
+    }
+
+    .handle-tooltip-disabled.handle-tooltip:after {
+        background: gray;
     }
 </style>

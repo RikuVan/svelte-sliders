@@ -13,3 +13,5 @@ pnpm run dev
 ```
 cd demo && pnpm run dev
 ```
+
+A few examples at [https://rikuvan.github.io/svelte-sliders/](https://rikuvan.github.io/svelte-sliders/)

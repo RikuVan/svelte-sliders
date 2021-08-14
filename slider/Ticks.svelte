@@ -37,16 +37,13 @@
             ...$sliderState,
             value,
         })}%;"
-    />
-    <span
-        class={`tick-value tick-value-${orientation}`}
-        class:tick-value-disabled={$sliderState.disabled}
-        style="{orientation === 'vertical' ? 'bottom' : 'left'}: {calcPercentOfRange({
-            ...$sliderState,
-            value,
-        })}%;"
     >
-        {$sliderState.ticks.map ? $sliderState.ticks.map(value, i) : value}
+        <span
+            class={`tick-value tick-value-${orientation}`}
+            class:tick-value-disabled={$sliderState.disabled}
+        >
+            {$sliderState.ticks.map ? $sliderState.ticks.map(value, i) : value}
+        </span>
     </span>
 {/each}
 
@@ -76,18 +73,21 @@
         color: gray;
         background: none;
         white-space: nowrap;
+        font-variant-numeric: tabular-nums;
     }
     .tick-value-horizontal {
         transform: translate(-50%, 50%);
-        top: 12px;
+        top: 2px;
     }
     .tick-value-vertical {
-        transform: translate(50%, 50%);
+        top: 0;
+        left: 12px;
+        transform: translate(0%, -50%);
     }
     .tick-disabled {
-        background: lightgrey;
+        background: #cfcfcf;
     }
     .tick-value-disabled {
-        color: lightgrey;
+        color: #cfcfcf;
     }
 </style>
