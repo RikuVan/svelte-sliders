@@ -3,6 +3,7 @@
     import { calcPercentOfRange } from './utils';
     import { tweened } from 'svelte/motion';
     import { sineOut } from 'svelte/easing';
+    import HandleTooltip from './HandleTooltip.svelte';
 
     /**
      * @typedef {import('svelte/store').Writable} Writable
@@ -29,6 +30,10 @@
      * @type {boolean}
      */
     let focus = false;
+    /**
+     * @type {boolean}
+     */
+    let hovered = false;
     /**
      * @type {HTMLDivElement}
      */
@@ -69,6 +74,14 @@
         focus = false;
     }
 
+    function handleMouseEnter() {
+        hovered = true;
+    }
+
+    function handleMouseLeave() {
+        hovered = false;
+    }
+
     /**
      * @type {number}
      */
@@ -87,6 +100,12 @@
     $: position =
         $sliderState.orientation === 'vertical' ? `bottom:${$tween}%;` : `left:${$tween}%;`;
     $: disabled = $sliderState.disabled;
+    $: active = $sliderState.activeHandle === index;
+    $: canShowActiveTooltip = (active && focus) || hovered;
+    $: withTooltip = $sliderState.tooltips.show
+        ? $sliderState.tooltips.show === 'always' ||
+          ($sliderState.tooltips.show === 'active' && canShowActiveTooltip)
+        : false;
 </script>
 
 <div
@@ -97,19 +116,32 @@
     bind:this={handle}
     on:keydown={handleKeyDown}
     on:mousedown|preventDefault={handleMouseDown}
+    on:mouseenter={handleMouseEnter}
+    on:mouseleave={handleMouseLeave}
     on:focus={handleFocus}
     on:blur={handleBlur}
     data-handle={index}
-    class:handle-active={$sliderState.activeHandle === index}
+    class:handle-active={active}
     class:handle-focus={focus}
     class:handle-disabled={disabled}
     aria-valuenow={$sliderState.value[index]}
     aria-orientation={$sliderState.orientation}
     aria-disabled={disabled}
-/>
+>
+    {#if withTooltip}
+        <HandleTooltip orientation={$sliderState.orientation}>
+            {#if $sliderState.tooltips.map}
+                {$sliderState.tooltips.map($sliderState.value[index])}
+            {:else}
+                {$sliderState.value[index]}
+            {/if}
+        </HandleTooltip>
+    {/if}
+</div>
 
 <style lang="scss">
     @use '_variables';
+    @use "sass:math";
     $handle: #838de7;
     $handle-radius: 10px;
     $handle-border-width: 4px;
@@ -127,12 +159,12 @@
     }
 
     .handle-horizontal {
-        top: -(($handle-radius + $rail-size) / 2);
+        top: -(math.div($handle-radius + $rail-size, 2));
         transform: translateX(-50%);
     }
 
     .handle-vertical {
-        left: -(($handle-radius + $rail-size) / 2);
+        left: -(math.div($handle-radius + $rail-size, 2));
         transform: translateY(+50%);
     }
 

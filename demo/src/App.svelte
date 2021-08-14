@@ -32,6 +32,7 @@
             value={[20, 40]}
             on:change={({ detail }) => ($store = detail)}
             ticks={{ mode: 'step', step: 10, map: val => `${val}%` }}
+            tooltips={{ show: 'active' }}
             {disabled}
         />
     </div>
@@ -50,6 +51,7 @@
             on:stop={({ detail }) => console.log('stop', detail)}
             on:set={({ detail }) => console.log('set', detail)}
             ticks={{ mode: 'step', step: 100, map: val => `${val} €` }}
+            tooltips={{ show: 'active', map: val => `${val} €` }}
             {disabled}
         />
     </div>

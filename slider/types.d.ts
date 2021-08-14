@@ -10,6 +10,9 @@ export type TickConfig =
           filter?: TickValueFilterer;
           map?: TickValueMapper;
       };
+export type Tooltip =
+    | undefined
+    | { show: 'active' | 'always' | 'never'; map?: (value: number) => string | number };
 export type SliderOrientation = 'horizontal' | 'vertical';
 export type SliderStoreState = {
     initialValue: number;
@@ -19,6 +22,7 @@ export type SliderStoreState = {
     max: number;
     disabled: boolean;
     orientation: SliderOrientation;
+    tooltip: Tooltip;
     step: number;
     ticks: TickConfig;
 };

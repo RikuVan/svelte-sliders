@@ -16,6 +16,7 @@
         equal,
         unnestSingle,
         getClosestHandle,
+        classes,
     } from './utils';
 
     /**
@@ -64,6 +65,13 @@
      * @type {import('./types').RangeBehavior}
      */
     export let rangeBehavior = 'block';
+    /**
+     * @type {boolean}
+     */
+    export let tooltips = { show: 'never' };
+
+    let _class = null;
+    export { _class as class };
 
     $: value = typeof value === 'number' ? [value] : value.slice(0, 2);
     $: isRange = value.length > 1;
@@ -89,6 +97,7 @@
         activeHandle,
         disabled,
         orientation,
+        tooltips,
         step,
         ticks,
     });
@@ -287,10 +296,11 @@
 <div
     bind:this={slider}
     {id}
-    class={`slider slider-${orientation}`}
+    class={classes(`slider slider-${orientation}`, _class)}
     on:ontouchstart={onStart}
     on:mousedown={onStart}
     on:keydown={onKeyDown}
+    class:slider-active={$store.sliderActive}
 >
     <Rail {key} />
     {#each value as _, index}

@@ -149,7 +149,7 @@ export function getPrecision(step) {
  * @param {any} v
  * @returns {any}
  */
-function noop(v) {
+export function noop(v) {
     return v;
 }
 
@@ -283,3 +283,12 @@ export const keyCode = {
     RIGHT: 39,
     DOWN: 40,
 };
+
+/**
+ * Filters out falsy classes.
+ * @param {...(string | false | null)} args The classes to be filtered
+ * @return {string} The classes without the falsy values
+ */
+export function classes(...args) {
+    return args.filter(cls => !!cls).join(' ');
+}
