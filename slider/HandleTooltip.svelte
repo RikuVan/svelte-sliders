@@ -64,7 +64,7 @@
     // pointer with box-shadow matching tooltip container
     .handle-tooltip-horizontal:after {
         bottom: -2px;
-        left: 46%;
+        left: calc(50% - 2px);
         clip-path: inset(0px -15px -15px 0px);
     }
 

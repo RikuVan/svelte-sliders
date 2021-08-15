@@ -25,6 +25,8 @@
      * @param {[number] | [number, number]} offsets
      */
     function getStyle(offsets) {
+        // if offsets have crossed over
+        offsets.sort();
         let style = '';
         // this offset is the percent length of the track
         const offset = isRange ? offsets[1] - offsets[0] : offsets[0];
@@ -44,6 +46,8 @@
      * @type {number}
      */
     $: style = getStyle(offsets);
+
+    $: console.log(key, style);
 </script>
 
 <div
