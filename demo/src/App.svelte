@@ -32,6 +32,7 @@
             min={-30}
             max={50}
             value={[20, 40]}
+            rectangularHandle={true}
             on:change={({ detail }) => ($store = detail)}
             ticks={{ mode: 'step', step: 8, map: val => `${val}°`, subDensity: 2 }}
             tooltips={{ show: 'active' }}

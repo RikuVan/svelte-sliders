@@ -29,6 +29,10 @@
     /**
      * @type {boolean}
      */
+    export let rectangular = false;
+    /**
+     * @type {boolean}
+     */
     let focus = false;
     /**
      * @type {boolean}
@@ -124,6 +128,7 @@
     class:handle-active={active}
     class:handle-focus={focus}
     class:handle-disabled={disabled}
+    class:handle-rectangular={rectangular}
     aria-valuenow={$sliderState.value[index]}
     aria-orientation={$sliderState.orientation}
     aria-disabled={disabled}
@@ -155,6 +160,13 @@
         z-index: 2;
         border: $handle-border-width solid variables.$main;
         background: #fff;
+        backface-visibility: hidden;
+
+        &-rectangular {
+            height: 12px;
+            width: 4px;
+            border-radius: 1px;
+        }
     }
 
     .handle-horizontal {

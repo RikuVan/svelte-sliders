@@ -76,6 +76,10 @@
      * @type {boolean}
      */
     export let tooltips = { show: 'never' };
+    /**
+     * @type {boolean}
+     */
+    export let rectangularHandle = false;
 
     let _class = null;
     export { _class as class };
@@ -311,7 +315,7 @@
 >
     <Rail {key} />
     {#each value as _, index}
-        <Handle {key} {index} />
+        <Handle {key} {index} rectangular={rectangularHandle} />
     {/each}
     <RangeSelection {key} />
     <Ticks {key} />
