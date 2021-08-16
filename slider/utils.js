@@ -186,6 +186,20 @@ export function getTickValues({ ticks, min, max }) {
         : [];
 }
 
+export function getSubTickPositions({ ticks, min, max }, tickValues = []) {
+    const { subDensity } = ticks;
+    const step = ((max - min) / 100) * subDensity;
+    console.log(step);
+    const subTicks = [];
+    for (let i = min; i < max; i += step) {
+        console.log(i);
+        if (!tickValues.includes(Math.floor(i))) {
+            subTicks.push(i);
+        }
+    }
+    return subTicks;
+}
+
 /**
  * find the closest step, including ticks, to a selected point
  * @param {number} val

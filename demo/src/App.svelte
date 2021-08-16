@@ -1,6 +1,4 @@
 <script>
-    import logo from './assets/svelte.png';
-    import Counter from './lib/Counter.svelte';
     import Layout from './Layout.svelte';
     import { Slider, TimeSlider } from 'attractions-slider';
     import { writable } from 'svelte/store';
@@ -35,7 +33,7 @@
             max={50}
             value={[20, 40]}
             on:change={({ detail }) => ($store = detail)}
-            ticks={{ mode: 'step', step: 10, map: val => `${val}°` }}
+            ticks={{ mode: 'step', step: 8, map: val => `${val}°`, subDensity: 2 }}
             tooltips={{ show: 'active' }}
             {disabled}
         />
@@ -54,7 +52,7 @@
             on:change={({ detail }) => ($store2 = detail)}
             on:start={({ detail }) => console.log('start', detail)}
             on:stop={({ detail }) => console.log('stop', detail)}
-            ticks={{ mode: 'step', step: 100, map: val => `${val} €` }}
+            ticks={{ mode: 'step', step: 100, map: val => `${val} €`, subDensity: 2 }}
             tooltips={{ show: 'active', map: val => `${val} €` }}
             {disabled}
         />
@@ -119,12 +117,6 @@
     .slider-data {
         margin: 3em auto;
     }
-
-    .slider-2-data {
-        margin-left: auto;
-        margin-right: 0;
-    }
-
     .slider-container-vertical {
         padding: 3em 0 5em 0;
         height: 400px;

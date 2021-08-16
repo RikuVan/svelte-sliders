@@ -3,12 +3,19 @@ type TickValueMapper = (value: number, i: number) => string | number;
 type TickValueFilterer = (value: number, index: number) => boolean;
 export type TickConfig =
     | { mode: 'none' }
-    | { mode: 'steps'; step: number; filter?: TickValueFilterer; map?: TickValueMapper }
+    | {
+          mode: 'steps';
+          step: number;
+          filter?: TickValueFilterer;
+          map?: TickValueMapper;
+          subDensity?: number;
+      }
     | {
           mode: 'values';
           values: number[];
           filter?: TickValueFilterer;
           map?: TickValueMapper;
+          subDensity?: number;
       };
 export type Tooltip =
     | undefined

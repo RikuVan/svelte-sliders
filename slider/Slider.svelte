@@ -51,6 +51,10 @@
      */
     export let dragOffset = 0;
     /**
+     * in 'step' mode, a value step which is used to add a tick at that interval from min to max
+     * in 'values' mode, a list of all the values where ticks should be placed is provided from min to max
+     * subDensity creates sub-ticks with a number that represents a percent interval on a 0-100 scale, e.g. 3 is every 3 percent
+     * in order for sub-ticks to be in sync with with ticks the tick should be a multiple of the sub-ticks
      * @type {import("./types").TickConfig}
      */
     export let ticks = {
